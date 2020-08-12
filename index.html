@@ -3,35 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/png" href="img/favicon.png">
+
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
-    <title>Document</title>
+    <title>Pomodoro Timer</title>
 </head>
 <body>
     <div class="container">
         <nav class="navbar">
-            <a href="#">🍅 Pomodoro Timer</a>
+            <a href="#"><span class="iconify" data-icon="emojione-v1:tomato" data-inline="false"></span> Pomodoro Timer</a>
         </nav>
     </div>
-
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo laudantium est quam nihil ullam nesciunt placeat, assumenda perferendis sit corporis.</p>
-
+    <p class="desc">Pomodoro Timer - study for 25 minutes straight then take a short brake of 5 minutes or a long brake of 15.</p>
     <!-- Clock -->
-    <div class="timer">
-        <div class="pomodoro-timer">
-            <span class="minutes">25</span> : <span class="seconds">00</span>
+    <div class="div-timer">
+        <div class="timer">
+            <div class="pomodoro-timer">
+                <span class="minutes"></span> : <span class="seconds"></span>
+            </div>
         </div>
     </div>
 
+    <div class="tomato-output"></div>
     <!-- Buttons -->
     <div class="buttons">
         <button class="start">start</button>
         <button class="short-brake">short brake</button>
         <button class="long-brake">long brake</button>
         <button class="cancel">back</button>
+        <button class="clear-btn">Clear Progress</button>
     </div>
 
     <script src="app.js"></script>
+    <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
 </body>
 </html>

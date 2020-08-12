@@ -1,19 +1,30 @@
-document.addEventListener('DOMContentLoaded', loadAll)
+document.addEventListener('DOMContentLoaded', loadAll);
+document.addEventListener('DOMContentLoaded', displayTomatosFromLS);
+
 // Variables
-let mins = 25;
-let sec  = 0;
+let mins            = 25,
+    sec             = '00',
+    studyCounter    = 0;
+
+const   tomato        = '<span class="iconify" data-icon="emojione-v1:tomato" data-inline="false"></span>',
+        tomatoArr     = [],
+        tomatoOutput  = document.querySelector('.tomato-output');
 
 // Buttons
-    startBtn        = document.querySelector('.start');
-    shortBrakeBtn   = document.querySelector('.short-brake');
-    longBrakeBtn    = document.querySelector('.long-brake');
-    backBtn         = document.querySelector('.cancel');
+const   startBtn        = document.querySelector('.start'),
+        shortBrakeBtn   = document.querySelector('.short-brake'),
+        longBrakeBtn    = document.querySelector('.long-brake'),
+        backBtn         = document.querySelector('.cancel'),
+        clearBtn        = document.querySelector('.clear-btn');
 
 // MP3
 const ring = new Audio('./shcool-bell.mp3');
 
 const minuteDisplay     = document.querySelector('.minutes');
 const secondsDisplay    = document.querySelector('.seconds');
+
+minuteDisplay.textContent   = mins;
+secondsDisplay.textContent  = sec;
 
 function loadAll(){
     // Start the study timer
@@ -27,6 +38,9 @@ function loadAll(){
 
     // Back btn click event
     backBtn.addEventListener('click', cancelBrake);
+
+    // Clear from LS
+    clearBtn.addEventListener('click', clearTomato);
 
     // Hide Brake Btn
     hideBtn();
@@ -64,6 +78,21 @@ function studyStart(){
                 // Play sounds
                 ring.play();
 
+                // Study counter
+                studyCounter++;
+
+                // Add icon
+                addTomato();
+                
+                displayTomatosFromLS();
+
+                if(studyCounter % 4 == 0){
+                    // Show message 
+                    showMessage(`You've been studying for ${studyCounter} straight sessions. Take a long brake!`, 'success')
+                } else {
+                    // Show message
+                    showMessage('Take a brake!', 'success');
+                }
                 // Show buttons
                 brakeBtn();
             }
@@ -107,6 +136,9 @@ function shortBrake(){
                 // Play sounds
                 ring.play();
 
+                // Show message 
+                showMessage('Brake Completed! Get back to work!', 'success');
+
                 // Show buttons
                 hideBtn();
             }
@@ -147,11 +179,101 @@ function startLongBrake(){
                 // Play sounds
                 ring.play();
 
+                // Show message
+                showMessage('Long brake is completed, I hope it was enough rest.', 'success')
+
                 // Show buttons
                 hideBtn();
             }
             sec = 60;
         }
+    }
+}
+
+// Add tomato
+function addTomato(){
+    // Add icon to array
+    tomatoArr.push(tomato);
+
+    // Add tomato to local storage
+    addTomatoToLS(tomato);
+    
+    console.log(tomatoArr);
+}
+
+function addTomatoToLS(tomato){
+    let tomatos;
+
+    if(localStorage.getItem('tomatos') === null){
+        tomatos = [];
+    } else {
+        tomatos = JSON.parse(localStorage.getItem('tomatos'));
+    }
+
+    tomatos.push(tomato);
+
+    localStorage.setItem('tomatos', JSON.stringify(tomatos));
+}
+
+function displayTomatosFromLS(){
+    let tomatos;
+
+    if(localStorage.getItem('tomatos') === null){
+        tomatos = [];
+    } else {
+        tomatos = JSON.parse(localStorage.getItem('tomatos'));
+    }
+     
+    let output = '';
+    tomatos.forEach(tomato => output += tomato);
+
+    // Add icons to HTML
+    tomatoOutput.innerHTML = output;
+}
+
+function clearTomato(){
+    // Clear from LS
+    localStorage.clear();
+
+    // Clear from UI
+    tomatoOutput.innerHTML = '';
+
+    // Set counter back to 0
+    studyCounter = 0;
+
+    // Show message
+    showMessage('Progress deleted', 'danger');
+}
+
+// Show Message
+function showMessage(message, className){
+    // Remove existing messages for new
+    clearMessage();
+
+    // Create a div
+    const div = document.createElement('div');
+    // Add text
+    div.appendChild(document.createTextNode(message));
+    // Add class
+    div.className = `alert ${className}`;
+
+    // Add to HTML
+    // Get parent
+    const divTimer = document.querySelector('.div-timer');
+    // Get timer div
+    const timerContainer = document.querySelector('.timer');    
+    // Insert in timerContainer before pomodoroTimer
+    divTimer.insertBefore(div, timerContainer);
+
+    // Remove after 5 seconds
+    setTimeout(() => clearMessage(), 5000);
+}
+
+function clearMessage(){
+    const currentMessage = document.querySelector('.alert');
+
+    if(currentMessage){
+        currentMessage.remove();
     }
 }
 
