@@ -8,20 +8,19 @@ let mins            = 25,
 
 const   tomato        = '<span class="iconify" data-icon="emojione-v1:tomato" data-inline="false"></span>',
         tomatoArr     = [],
-        tomatoOutput  = document.querySelector('.tomato-output');
-
-// Buttons
-const   startBtn        = document.querySelector('.start'),
+        tomatoOutput  = document.querySelector('.tomato-output'),
+        minuteDisplay     = document.querySelector('.minutes'),
+        secondsDisplay    = document.querySelector('.seconds'),
+        // MP3
+        ring = new Audio('./shcool-bell.mp3'),
+        // Buttons
+        startBtn        = document.querySelector('.start'),
         shortBrakeBtn   = document.querySelector('.short-brake'),
         longBrakeBtn    = document.querySelector('.long-brake'),
         backBtn         = document.querySelector('.cancel'),
         clearBtn        = document.querySelector('.clear-btn');
 
-// MP3
-const ring = new Audio('./shcool-bell.mp3');
 
-const minuteDisplay     = document.querySelector('.minutes');
-const secondsDisplay    = document.querySelector('.seconds');
 
 minuteDisplay.textContent   = mins;
 secondsDisplay.textContent  = sec;
@@ -51,6 +50,9 @@ function studyStart(){
     mins = 24;
     sec  = 59;
 
+    // Generate Random Quote
+    generateRandomQuote();
+
     // Change the display
     minuteDisplay.innerHTML   = mins;
     secondsDisplay.innerHTML  = sec;
@@ -70,8 +72,8 @@ function studyStart(){
         sec -= 1;
         secondsDisplay.innerHTML  = sec;
 
-        if(sec <= 0){
-            if(mins <= 0){
+        if(sec <= 57){
+            if(mins <= 24){
                 // Cleaer the time intervals
                 clearInterval(minuteInterval);
                 clearInterval(secondsInterval);
@@ -99,13 +101,15 @@ function studyStart(){
             sec = 60;
         }
     }
-
 }
 
 function shortBrake(){
     // Change the minutes and seconds
     mins = 4;
     sec  = 59;
+
+    // Generate Random Quote
+    generateRandomQuote();
 
     // Change the display
     minuteDisplay.innerHTML   = mins;
@@ -128,8 +132,8 @@ function shortBrake(){
         sec -= 1;
         secondsDisplay.innerHTML  = sec;
 
-        if(sec <= 0){
-            if(mins <= 0){
+        if(sec <= 57){
+            if(mins <= 4){
                 // Cleaer the time intervals
                 clearInterval(minuteInterval);
                 clearInterval(secondsInterval);
@@ -152,6 +156,9 @@ function startLongBrake(){
     mins = 14;
     sec  = 59;
 
+    // Generate Random Quote
+    generateRandomQuote();
+
     // Change the display
     minuteDisplay.innerHTML   = mins;
     secondsDisplay.innerHTML  = sec;
@@ -171,8 +178,8 @@ function startLongBrake(){
         sec -= 1;
         secondsDisplay.innerHTML  = sec;
 
-        if(sec <= 0){
-            if(mins <= 0){
+        if(sec <= 57){
+            if(mins <= 14){
                 // Cleaer the time intervals
                 clearInterval(minuteInterval);
                 clearInterval(secondsInterval);
@@ -198,7 +205,7 @@ function addTomato(){
     // Add tomato to local storage
     addTomatoToLS(tomato);
     
-    console.log(tomatoArr);
+    // console.log(tomatoArr);
 }
 
 function addTomatoToLS(tomato){
@@ -300,4 +307,28 @@ function hideOtherBtn(){
     longBrakeBtn.style.display  = 'none';
     backBtn.style.display       = 'flex';
     startBtn.style.display      = 'none';
+}
+
+async function getQuote(){
+    const response = await fetch(`https://type.fit/api/quotes`);
+    
+    const data = await response.json();
+    return data;
+ }
+ 
+function generateRandomQuote(){
+    getQuote()
+    .then(res => res)
+    .then(data => {
+        const randomQuote = Math.round(Math.random() * data.length);
+
+        const output = `
+            <h3 class="quote-header">Get your qute down here!</h3>
+            <p>${data[randomQuote].text} -${data[randomQuote].author}
+            </p>
+        `;
+
+        document.querySelector('.quote-container').innerHTML = output;
+    })
+    .catch(err => console.log(err));
 }
