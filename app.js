@@ -72,8 +72,8 @@ function studyStart(){
         sec -= 1;
         secondsDisplay.innerHTML  = sec;
 
-        if(sec <= 57){
-            if(mins <= 24){
+        if(sec <= 0){
+            if(mins <= 0){
                 // Cleaer the time intervals
                 clearInterval(minuteInterval);
                 clearInterval(secondsInterval);
@@ -178,8 +178,8 @@ function startLongBrake(){
         sec -= 1;
         secondsDisplay.innerHTML  = sec;
 
-        if(sec <= 57){
-            if(mins <= 14){
+        if(sec <= 0){
+            if(mins <= 0){
                 // Cleaer the time intervals
                 clearInterval(minuteInterval);
                 clearInterval(secondsInterval);
